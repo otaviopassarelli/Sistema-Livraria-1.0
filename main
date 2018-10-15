@@ -1,0 +1,169 @@
+#include<stdio.h>
+
+/* Função para Cadastros de Empresas */
+int cad_empresa() {
+#define N 50
+
+	/* Vetor recebe struct como elementos */
+	struct fornecedor
+	{
+		char empresa[N];
+		int CNPJ;
+		char endereco[N];
+		char email[N];
+		int tel;
+
+	} fornecedores[N];
+
+	int i, cnpj, posicao, existe, opcao;
+
+	do
+	{
+		printf("1. Realizar Cadastro\n");
+		printf("2. Consultar cadastros\n");
+		printf("3. Voltar\n");
+		printf("Digite uma opção: ");
+		scanf("%d", &opcao);
+
+		switch(opcao)
+		{
+			case 1:
+				
+				/* Faz o cadastro de um fornecedor =================================== */
+					existe=0; 
+					printf("\nDigite o CNPJ da empresa: ");
+					scanf("%d", &cnpj);
+
+					for(i=0; i<N; i++) //Zerando as posições do vetor "fornecedores"
+						fornecedores[i].CNPJ = 0;
+			
+					/* Verifica se o CNPJ já existe ================================== */
+					for(i=0; (i<N) && (existe == 0); i++)
+					{
+						if(fornecedores[i].CNPJ == cnpj)  /* CNPJ igual já existe no vetor */
+							existe=1; 
+					}
+
+					if(existe==1)
+						printf("\nCNPJ já existente.\n");  /* Tratamento de erros */
+
+					else
+					{
+						posicao = -1;
+						i=0;
+
+						/* Encontra uma posição vazia no vetor ======================== */
+						while(i<N)
+						{
+							if(fornecedores[i].CNPJ == 0)
+							{
+								/* Salva a posição disponível e finaliza o loop */
+								posicao=i;
+								i=N;
+							}
+
+							else
+								i++; // Continua a busca
+						}
+
+						if(posicao == -1)  /* Tratamento de erros */
+							printf("\nImpossível realizar mais cadastros.\n");
+
+						else
+						{			
+							/* Entradas de informações ================================= */	
+							printf("Empresa: ");
+							fgets(fornecedores[posicao].empresa, 50, stdin);
+							fgets(fornecedores[posicao].empresa, 50, stdin);
+
+							printf("Endereço: ");
+							fgets(fornecedores[posicao].endereco, 50, stdin);
+
+							printf("E-mail: ");
+							fgets(fornecedores[posicao].email, 50, stdin);
+
+							printf("Telefone: ");
+							scanf("%d", &fornecedores[posicao].tel);
+
+							/* Registra o CNPJ digitado na posição vazia encontrada */
+							fornecedores[posicao].CNPJ = cnpj;
+
+							printf("\nCadastro realizado.\n\n");
+						}
+					}
+			break;
+
+			case 2:
+				
+				/* Consulta cadastros já existentes ================================== */
+				existe = 0;
+				printf("\nDigite o CNPJ da empresa: ");
+				scanf("%d", &cnpj);
+
+				/* Faz varredura no vetor em busca de um CNPJ igual ao digitado */
+				for(i=0; (i<N) && (existe == 0); i++)
+				{
+					if(fornecedores[i].CNPJ == cnpj)
+						existe=1; // Variável de controle
+
+					if(existe==1)
+					{
+						printf("Informações:\n\n"); //Exibe as informações encontradas
+						printf("Empresa: %sCNPJ: %d\nEndereço: %sE-mail: %sTelefone: %d\n\n", fornecedores[i].empresa, fornecedores[i].CNPJ ,fornecedores[i].endereco ,fornecedores[i].email ,fornecedores[i].tel);
+					}
+	
+					else  // Tratamento de erro
+						printf("Empresa não cadastrada.");
+
+				}
+
+			break;
+		}
+
+	/* Finaliza o loop "do.. while" e ativa a opção 3 "voltar" */
+	} while(opcao != 3);
+
+	return 0;
+}
+
+/* Função principal =================================================================== */
+int main () {
+
+	int opcao;
+
+	/* Iniciação do menu de opções primário */
+	do
+	{
+		printf("              Sistema Livraria 1.0\n");
+		printf("                   Menu\n");
+		printf("1. Cadastro de clientes\n");
+		printf("2. Cadastro de produtos\n");
+		printf("3. Cadastro de fornecedores\n");
+		printf("4. Cadastro de vendas\n");
+		printf("5. Sair\n");
+		printf("Digite uma opção: ");
+		scanf("%d", &opcao);
+		printf("\n\n");
+
+		/* Realiza a chamada das funções de acordo com a opção do menu primário */
+		switch(opcao)
+		{
+			case 1:
+			break;
+
+			case 2:
+			break;
+
+			case 3:
+				cad_empresa();
+				break;
+		
+			case 4:
+			break;
+		}
+	
+	/* Finaliza o loop "do.. while" e ativa a opção 5 "Sair" */
+	} while (opcao != 5);
+
+	return 0;
+}
